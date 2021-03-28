@@ -11,6 +11,8 @@ class CreateCard extends StatefulWidget {
 }
 
 class _CreateCardState extends State<CreateCard> {
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController _textEditingController = TextEditingController();
   TextEditingController _countController = TextEditingController();
   String title = '';
@@ -35,8 +37,6 @@ class _CreateCardState extends State<CreateCard> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       body: SafeArea(
         child: Center(
