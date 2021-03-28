@@ -2,10 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:tally/create_card_screen.dart';
-import 'package:provider/provider.dart';
-// import 'card.dart';
+
 import 'constants.dart';
-// import 'model.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isCardsVisible;
