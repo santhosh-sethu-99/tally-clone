@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+// import 'package:tally_v2/model.dart';
+// import 'package:tally_v2/model.dart';
+// import "package:tally_v2/model.dart";
 // import 'package:tally/card.dart';
-import 'model.dart';
+// import 'model.dart';
 
+import 'card.dart';
 import 'constants.dart';
 
 class CreateCard extends StatefulWidget {
@@ -37,6 +41,8 @@ class _CreateCardState extends State<CreateCard> {
 
   @override
   Widget build(BuildContext context) {
+    // final database = Provider.of<AppDatabase>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -449,15 +455,15 @@ class _CreateCardState extends State<CreateCard> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      // addCards(title, Colors.amber);
-
-                      final database = Provider.of<AppDatabase>(context);
+                      addCards(title, Colors.amber);
                       // final task = ItemList(
-
+                      //   id: null,
                       //   taskName: _textEditingController.text,
                       // );
-                      Navigator.of(context).pop();
+                      // // database.insertTask(task);
+                      // AppDatabase().insertTask(task);
                       setState(() {});
+                      Navigator.of(context).pop();
                     },
                     child: Text(
                       'CREATE CARD',
