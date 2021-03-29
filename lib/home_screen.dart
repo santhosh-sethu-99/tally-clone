@@ -1,10 +1,7 @@
-// import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tally/create_card_screen.dart';
 import 'package:tally/database_helper.dart';
 
-import 'constants.dart';
 import 'model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -82,6 +79,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             onLongPress: () {
                               print("Long Press");
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible:
+                                    false, // user must tap button!
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Delete'),
+                                    content: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: <Widget>[
+                                          Text(
+                                              'Are you sure you want to delete this task?'),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancel'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Delete'),
+                                        onPressed: () {
+                                          DatabaseHelper.instance.deleteTask(
+                                              snapshot.data[index].id);
+                                          _updateTaskList();
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: AnimatedOpacity(
                               duration: Duration(milliseconds: 5000),
@@ -117,13 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         // TODO: create a new card
         onPressed: () {
-          setState(() {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => CreateCard(),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => CreateCard(
+                updateList: _updateTaskList,
               ),
-            );
-          });
+            ),
+          );
         },
         child: Icon(
           Icons.add,
@@ -132,80 +164,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// StreamBuilder<List<ItemList>> _buildTaskList(BuildContext context) {
-//   final database = Provider.of<AppDatabase>(context);
-//   return StreamBuilder(
-//     stream: database.watchAllTasks(),
-//     builder: (context, AsyncSnapshot<List<ItemList>> snapshot) {
-//       final tasks = snapshot.data ?? List();
-
-//       // return ListView.builder(
-//       //   itemCount: tasks.length,
-//       //   itemBuilder: (_, index) {
-//       //     final itemTask = tasks[index];
-//       //     return _buildListItem(itemTask, database);
-//       //   },
-//       // );
-//       return GridView.builder(
-//         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//           crossAxisCount: 2,
-//         ),
-//         itemCount: tasks.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           final itemTask = tasks[index];
-//           return _buildListItem(itemTask, database);
-//         },
-//       );
-//     },
-//   );
-// }
-
-// Widget _buildListItem(ItemList itemList, AppDatabase database) {
-//   // return Slidable(
-//   //   actionPane: SlidableDrawerActionPane(),
-//   //   secondaryActions: <Widget>[
-//   //     IconSlideAction(
-//   //       caption: 'Delete',
-//   //       color: Colors.red,
-//   //       icon: Icons.delete,
-//   //       onTap: () => database.deleteTask(itemTask),
-//   //     )
-//   //   ],
-//   //   child: CheckboxListTile(
-//   //     title: Text(itemTask.name),
-//   //     subtitle: Text(itemTask.dueDate?.toString() ?? 'No date'),
-//   //     value: itemTask.completed,
-//   //     onChanged: (newValue) {
-//   //       database.updateTask(itemTask.copyWith(completed: newValue));
-//   //     },
-//   //   ),
-//   // );
-
-//   return Padding(
-//     padding: const EdgeInsets.all(3),
-//     child: InkWell(
-//       onLongPress: () {
-//         print("Long Press");
-//       },
-//       child: AnimatedOpacity(
-//         duration: Duration(milliseconds: 5000),
-//         opacity: 1.0,
-//         child: Container(
-//           height: 200,
-//           width: 200,
-//           child: Card(
-//             color: Colors.amberAccent,
-//             child: Column(
-//               children: [
-//                 Center(
-//                   child: Text(itemList.taskName),
-//                 )
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }

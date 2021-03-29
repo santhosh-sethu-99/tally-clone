@@ -3,11 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:tally/database_helper.dart';
 
-import 'card.dart';
 import 'constants.dart';
 import 'model.dart';
 
 class CreateCard extends StatefulWidget {
+  final Function updateList;
+
+  const CreateCard({this.updateList});
+
   @override
   _CreateCardState createState() => _CreateCardState();
 }
@@ -454,15 +457,9 @@ class _CreateCardState extends State<CreateCard> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        addCards(title, Colors.amber);
-                        // final task = ItemList(
-                        //   id: null,
-                        //   taskName: _textEditingController.text,
-                        // );
-                        // // database.insertTask(task);
-                        // AppDatabase().insertTask(task);
                         Task task = Task(taskName: _textEditingController.text);
                         DatabaseHelper.instance.insertTask(task);
+                        widget.updateList();
                         setState(() {});
                         Navigator.of(context).pop();
                       },
