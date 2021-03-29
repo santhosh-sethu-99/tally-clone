@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:tally/database_helper.dart';
 
 import 'card.dart';
 import 'constants.dart';
+import 'model.dart';
 
 class CreateCard extends StatefulWidget {
   @override
@@ -459,6 +461,8 @@ class _CreateCardState extends State<CreateCard> {
                         // );
                         // // database.insertTask(task);
                         // AppDatabase().insertTask(task);
+                        Task task = Task(taskName: _textEditingController.text);
+                        DatabaseHelper.instance.insertTask(task);
                         setState(() {});
                         Navigator.of(context).pop();
                       },
