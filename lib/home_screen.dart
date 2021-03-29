@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:tally/create_card_screen.dart';
+import 'package:tally/database_helper.dart';
 
 import 'constants.dart';
+import 'model.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isCardsVisible;
@@ -15,9 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<List<Task>> _taskList;
+
   @override
   void initState() {
     super.initState();
+    _updateTaskList();
+  }
+
+  _updateTaskList() {
+    setState(() {
+      _taskList = DatabaseHelper.instance.getTaskList();
+    });
   }
 
   @override
@@ -51,13 +62,50 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemCount: cards.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return cards[index];
+                child: FutureBuilder(
+                  future: _taskList,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: InkWell(
+                            onLongPress: () {
+                              print("Long Press");
+                            },
+                            child: AnimatedOpacity(
+                              duration: Duration(milliseconds: 5000),
+                              opacity: 1.0,
+                              child: Container(
+                                height: 200,
+                                width: 200,
+                                child: Card(
+                                  color: Colors.amberAccent,
+                                  child: Column(
+                                    children: [
+                                      Center(
+                                        child:
+                                            Text(snapshot.data[index].taskName),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
                 // child: _buildTaskList(context),
