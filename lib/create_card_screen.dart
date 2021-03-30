@@ -106,7 +106,7 @@ class _CreateCardState extends State<CreateCard> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(
                                         right: 10, left: 10),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _textEditingController,
                                       onChanged: (value) {
                                         title = value;
@@ -186,63 +186,63 @@ class _CreateCardState extends State<CreateCard> {
                           height: 10,
                         ),
                         // Track On
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'TRACK ON',
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Wrap(
-                                    spacing: 6.0,
-                                    runSpacing: 6.0,
-                                    children: <Widget>[
-                                      for (String key in kTrackOn.keys)
-                                        InputChip(
-                                          onPressed: () {
-                                            if (!_trackOn
-                                                .contains(kTrackOn[key])) {
-                                              _trackOn.add(kTrackOn[key]);
-                                            } else {
-                                              _trackOn.remove(kTrackOn[key]);
-                                            }
-                                            setState(() {});
-                                          },
-                                          selected:
-                                              _trackOn.contains(kTrackOn[key]),
-                                          labelPadding: EdgeInsets.all(2.0),
-                                          label: Text(
-                                            kTrackOn[key],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          backgroundColor: Colors.white38,
-                                          elevation: 0.0,
-                                          shadowColor: Colors.grey[60],
-                                          padding: EdgeInsets.all(8.0),
-                                        ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: Container(
+                        //     child: Column(
+                        //       mainAxisAlignment: MainAxisAlignment.start,
+                        //       children: [
+                        //         Align(
+                        //           alignment: Alignment.centerLeft,
+                        //           child: Text(
+                        //             'TRACK ON',
+                        //           ),
+                        //         ),
+                        //         const SizedBox(
+                        //           height: 10,
+                        //         ),
+                        //         Align(
+                        //           alignment: Alignment.centerLeft,
+                        //           child: Wrap(
+                        //             spacing: 6.0,
+                        //             runSpacing: 6.0,
+                        //             children: <Widget>[
+                        //               for (String key in kTrackOn.keys)
+                        //                 InputChip(
+                        //                   onPressed: () {
+                        //                     if (!_trackOn
+                        //                         .contains(kTrackOn[key])) {
+                        //                       _trackOn.add(kTrackOn[key]);
+                        //                     } else {
+                        //                       _trackOn.remove(kTrackOn[key]);
+                        //                     }
+                        //                     setState(() {});
+                        //                   },
+                        //                   selected:
+                        //                       _trackOn.contains(kTrackOn[key]),
+                        //                   labelPadding: EdgeInsets.all(2.0),
+                        //                   label: Text(
+                        //                     kTrackOn[key],
+                        //                     style: TextStyle(
+                        //                       color: Colors.white,
+                        //                       fontSize: 12,
+                        //                     ),
+                        //                   ),
+                        //                   backgroundColor: Colors.white38,
+                        //                   elevation: 0.0,
+                        //                   shadowColor: Colors.grey[60],
+                        //                   padding: EdgeInsets.all(8.0),
+                        //                 ),
+                        //             ],
+                        //           ),
+                        //         )
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
                         // Log Activity Using
                         Padding(
                           padding: const EdgeInsets.all(10),
@@ -266,7 +266,7 @@ class _CreateCardState extends State<CreateCard> {
                                     runSpacing: 6.0,
                                     children: <Widget>[
                                       for (int index = 0;
-                                          index < kValuType.length;
+                                          index < kValuType.length - 1;
                                           index++)
                                         InputChip(
                                           onPressed: () {
@@ -331,7 +331,7 @@ class _CreateCardState extends State<CreateCard> {
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             right: 10, left: 10),
-                                        child: TextField(
+                                        child: TextFormField(
                                           controller: _countController,
                                           keyboardType: TextInputType.number,
                                           onChanged: (value) {
@@ -474,19 +474,22 @@ class _CreateCardState extends State<CreateCard> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        Task task = Task(
-                          taskName: _textEditingController.text,
-                          resetDay: _resetTally,
-                          setTarget: _setTarget,
-                          typeOfCount: _activityLog,
-                          defaultCount: _countController.text,
-                          color: colorToString(_color),
-                        );
-                        DatabaseHelper.instance.insertTask(task);
-                        widget.updateList();
-                        // print(_color.toString() as Color);
-                        setState(() {});
-                        Navigator.of(context).pop();
+                        if (_formKey.currentState.validate()) {
+                          Task task = Task(
+                            taskName: _textEditingController.text,
+                            count: 0,
+                            resetDay: _resetTally,
+                            setTarget: _setTarget,
+                            typeOfCount: _activityLog,
+                            defaultCount: int.parse(_countController.text),
+                            color: colorToString(_color),
+                          );
+                          DatabaseHelper.instance.insertTask(task);
+                          widget.updateList();
+                          // print(_color.toString() as Color);
+                          setState(() {});
+                          Navigator.of(context).pop();
+                        }
                       },
                       child: Text(
                         'CREATE CARD',
