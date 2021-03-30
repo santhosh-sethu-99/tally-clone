@@ -14,6 +14,12 @@ class DatabaseHelper {
   String taskTable = 'task_table';
   String colId = 'id';
   String colTitle = 'taskName';
+  String colTypeOfCount = 'typeOfCount';
+  String colReset = "resetDay";
+  String colTrackOn = "trackOn";
+  String colDefaultCount = "defaultCount";
+  String colSetTarget = "setTarget";
+  String colColor = "color";
 
   Future<Database> get db async {
     if (_db == null) {
@@ -27,7 +33,7 @@ class DatabaseHelper {
     String path = dir.path + 'tally_list.db';
     final taskListDb = await openDatabase(
       path,
-      version: 2,
+      version: 11,
       onCreate: _createDb,
     );
     return taskListDb;
@@ -35,7 +41,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE $taskTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT)',
+      'CREATE TABLE $taskTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT, $colTypeOfCount TEXT, $colReset TEXT, $colDefaultCount TEXT, $colSetTarget TEXT, $colColor TEXT)',
     );
   }
 
