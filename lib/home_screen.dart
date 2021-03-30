@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tally/create_card_screen.dart';
 import 'package:tally/database_helper.dart';
+import 'package:tally/utils.dart';
 
 import 'model.dart';
 
@@ -78,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(3),
                           child: InkWell(
                             onLongPress: () {
-                              print("Long Press");
                               showDialog<void>(
                                 context: context,
                                 barrierDismissible:
@@ -122,13 +122,75 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 200,
                                 width: 200,
                                 child: Card(
-                                  color: Colors.amberAccent,
+                                  color: stringToColor(
+                                      snapshot.data[index].color ?? 'amber'),
                                   child: Column(
                                     children: [
-                                      Center(
-                                        child:
-                                            Text(snapshot.data[index].taskName),
-                                      )
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        snapshot.data[index].taskName
+                                                .toUpperCase() ??
+                                            '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data[index].resetDay ?? '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data[index].setTarget ?? '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data[index].typeOfCount ?? '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      Text(
+                                        snapshot.data[index].defaultCount ?? '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      // Text(
+                                      //   snapshot.data[index].color ?? '',
+                                      //   style: TextStyle(
+                                      //     color: Colors.black,
+                                      //     letterSpacing: 2,
+                                      //     fontStyle: FontStyle.normal,
+                                      //     fontWeight: FontWeight.bold,
+                                      //     fontSize: 25,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),

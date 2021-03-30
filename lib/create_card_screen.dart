@@ -5,6 +5,7 @@ import 'package:tally/database_helper.dart';
 
 import 'constants.dart';
 import 'model.dart';
+import 'utils.dart';
 
 class CreateCard extends StatefulWidget {
   final Function updateList;
@@ -33,6 +34,7 @@ class _CreateCardState extends State<CreateCard> {
     "FRI",
     "SAT",
   ];
+  Color _color = Colors.white;
 
   @override
   void initState() {
@@ -241,59 +243,6 @@ class _CreateCardState extends State<CreateCard> {
                         const SizedBox(
                           height: 10,
                         ),
-                        // Default Count
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'DEFAULT COUNT',
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 300,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white30,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 10, left: 10),
-                                      child: TextField(
-                                        controller: _countController,
-                                        keyboardType: TextInputType.number,
-                                        onChanged: (value) {
-                                          title = value;
-                                          setState(() {});
-                                        },
-                                        decoration: InputDecoration(
-                                          fillColor: Colors.white70,
-                                          hintText: "",
-                                          border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
                         // Log Activity Using
                         Padding(
                           padding: const EdgeInsets.all(10),
@@ -351,6 +300,61 @@ class _CreateCardState extends State<CreateCard> {
                         const SizedBox(
                           height: 10,
                         ),
+                        // Default Count
+                        if (_activityLog == "Default Count")
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'DEFAULT COUNT',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          300,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white30,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 10, left: 10),
+                                        child: TextField(
+                                          controller: _countController,
+                                          keyboardType: TextInputType.number,
+                                          onChanged: (value) {
+                                            title = value;
+                                            setState(() {});
+                                          },
+                                          decoration: InputDecoration(
+                                            fillColor: Colors.white70,
+                                            hintText: "",
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (_activityLog == "Default Count")
+                          const SizedBox(
+                            height: 10,
+                          ),
                         // Set Target
                         Padding(
                           padding: const EdgeInsets.all(10),
@@ -423,25 +427,38 @@ class _CreateCardState extends State<CreateCard> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        for (int i = 0; i < kColors.length; i++)
-                                          Container(
-                                            height: 25,
-                                            width: 25,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(25),
-                                              ),
-                                              color: kColors[i],
+                                Wrap(
+                                  spacing: 25.0,
+                                  runSpacing: 10.0,
+                                  children: [
+                                    for (int i = 0; i < kColors.length; i++)
+                                      InkWell(
+                                        onTap: () {
+                                          _color = kColors[i];
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(30),
                                             ),
+                                            color: kColors[i],
+                                            border: kColors[i] == _color
+                                                ? Border.all(
+                                                    color: Colors.black,
+                                                    width: 3,
+                                                  )
+                                                : null,
                                           ),
-                                      ],
-                                    ))
+                                        ),
+                                      ),
+                                    const SizedBox(
+                                      height: 10,
+                                    )
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -457,9 +474,17 @@ class _CreateCardState extends State<CreateCard> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        Task task = Task(taskName: _textEditingController.text);
+                        Task task = Task(
+                          taskName: _textEditingController.text,
+                          resetDay: _resetTally,
+                          setTarget: _setTarget,
+                          typeOfCount: _activityLog,
+                          defaultCount: _countController.text,
+                          color: colorToString(_color),
+                        );
                         DatabaseHelper.instance.insertTask(task);
                         widget.updateList();
+                        // print(_color.toString() as Color);
                         setState(() {});
                         Navigator.of(context).pop();
                       },
