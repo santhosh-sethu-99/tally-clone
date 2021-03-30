@@ -1,15 +1,17 @@
 class Task {
   int id;
   String taskName;
+  int count;
   String resetDay;
   String setTarget;
   String typeOfCount;
-  String defaultCount;
+  int defaultCount;
   String color;
 
   Task({
     this.id,
     this.taskName,
+    this.count,
     this.resetDay,
     this.setTarget,
     this.typeOfCount,
@@ -19,6 +21,7 @@ class Task {
   Task.withId({
     this.id,
     this.taskName,
+    this.count,
     this.resetDay,
     this.setTarget,
     this.typeOfCount,
@@ -32,6 +35,7 @@ class Task {
       map["id"] = id;
     }
     map["taskName"] = taskName;
+    map["count"] = count;
     map["resetDay"] = resetDay;
     map["setTarget"] = setTarget;
     map["typeOfCount"] = typeOfCount;
@@ -44,6 +48,7 @@ class Task {
     return Task.withId(
       id: map["id"],
       taskName: map["taskName"],
+      count: map["count"],
       resetDay: map["resetDay"],
       setTarget: map["setTarget"],
       typeOfCount: map["typeOfCount"],
